@@ -8,7 +8,7 @@ import ssl
 def usage():
     print (
         "Usage: python ssl-conn-test.py "
-        "[geoserver_catalog_url] [key_file] [cert_file] [ca_cert_file]\n"
+        "geoserver_catalog_url key_file cert_file ca_cert_file\n"
         "  NOTE: key_file should not be passphrase-protected for this test\n\n"
         "Sample: python ssl-conn-test.py https://localhost:8443/geoserver "
         "pki/rod_key.pem pki/rod_cert.pem pki/ca.pem ")
@@ -23,6 +23,8 @@ if __name__ == "__main__":
     url = sys.argv[1] + "/rest/workspaces.xml"
 
     # Try connecting using patched httplib2 library
+    # SSL protocols (see ssl module):
+    #   ssl.PROTOCOL_TLSv1, ssl.PROTOCOL_SSLv23, ssl.PROTOCOL_SSLv3
     http = httplib2.Http(ca_certs=ca_certs,
                          disable_ssl_certificate_validation=False,
                          ssl_protocol=ssl.PROTOCOL_TLSv1)
