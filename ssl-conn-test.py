@@ -1,10 +1,7 @@
 import os
 import sys
-sys.path.insert(
-    0,
-    os.path.abspath(os.path.join(os.path.dirname(__file__), 'libs')))
-import httplib2
-import requests
+from libs import httplib2
+from libs import requests
 import ssl
 
 
@@ -23,7 +20,7 @@ if __name__ == "__main__":
     key = sys.argv[2]
     cert = sys.argv[3]
     ca_certs = sys.argv[4]
-    url = sys.argv[1] + "/rest/workspaces"
+    url = sys.argv[1] + "/rest/workspaces.xml"
 
     # Try connecting using patched httplib2 library
     http = httplib2.Http(ca_certs=ca_certs,
@@ -31,19 +28,22 @@ if __name__ == "__main__":
                          ssl_protocol=ssl.PROTOCOL_TLSv1)
     http.add_certificate(key, cert, '')
     response, content = http.request(url, "GET")
-    if response.status == 200:
-        print "Connection suceeded using httplib2"
+    if response.status == 200 and "<workspaces>" in content:
+        print "### Connection SUCEEDED using httplib2 ###"
         print content
     else:
-        print "Connection failed using httlib2"
+        print "### Connection FAILED using httlib2 ###"
         print (content or response.status)
 
     # Try connecting using requests library
     response = requests.get(url, cert=(cert, key), verify=ca_certs)
     try:
         response.raise_for_status()
-        print "Connection suceeded using requests"
-    except:
-        print "Connection failed using request"
+        if "<workspaces>" in response.text:
+            print "### Connection SUCEEDED using requests ###"
+        else:
+            raise requests.HTTPError
+    except requests.HTTPError:
+        print "### Connection FAILED using request ###"
     finally:
         print response.text
