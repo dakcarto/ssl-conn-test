@@ -32,6 +32,8 @@ class TestBrowser(QDialog, Ui_TestBrowser):
         self.nam = self.webView.page().networkAccessManager()
         """:type : QNetworkAccessManager"""
 
+        self.qt48 = "0x%0.2X" % QT_VERSION >= "0x40800"
+
         self.defaulturls = [
             "https://example.com",
             "http://localhost",
@@ -46,13 +48,24 @@ class TestBrowser(QDialog, Ui_TestBrowser):
         self.comboBox.lineEdit().setAlignment(Qt.AlignLeft)
         self.comboBox.addItems(self.defaulturls)
 
-        self.protocols = [
-            "SecureProtocols",
-            "TlsV1",
-            "TlsV1SslV3",
-            "SslV3",
-            "SslV2",
-        ]
+        if self.qt48:
+            # Qt 4.8 defaults to SecureProtocols, i.e. TlsV1SslV3
+            # http://qt-project.org/doc/qt-4.8/qssl.html#SslProtocol-enum
+            self.protocols = [
+                "SecureProtocols",
+                "TlsV1",
+                "TlsV1SslV3",
+                "SslV3",
+                "SslV2",
+            ]
+        else:
+            # older Qt 4.7 defaults to now-vulnerable SSLv3
+            # http://qt-project.org/doc/qt-4.7/qssl.html
+            self.protocols = [
+                "TlsV1",
+                "SslV3",
+                "SslV2",
+                ]
         self.cmbxProtocol.addItems(self.protocols)
 
         self.plainTextEdit.ensureCursorVisible()
@@ -206,8 +219,11 @@ class TestBrowser(QDialog, Ui_TestBrowser):
         ptxt = self.cmbxProtocol.currentText()
         enums_kv = dict((k, v) for k, v in vars(QSsl).items()
                         if isinstance(v, QSsl.SslProtocol))
-        if not enums_kv.has_key(ptxt):
-            return QSsl.SecureProtocols
+        if ptxt not in enums_kv:
+            if self.qt48:
+                return QSsl.SecureProtocols  # default
+            else:
+                return QSsl.TlsV1  # switch default from SSLv3
         return enums_kv[ptxt]
 
     # noinspection PyMethodMayBeStatic
