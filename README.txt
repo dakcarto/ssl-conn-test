@@ -1,21 +1,27 @@
 Scripts to debug SSL/PKI connections for QGIS core and OpenGeo Explorer plugin
 ==============================================================================
 
-ssl-conn-qt.[py|bat] scripts
+ssl-conn-qt.[py|bat|sh] scripts
 ----------------------------
 
 Script launches a Qt-based test Web browser, with connection log output. This
 mirrors how QGIS handles connections (though not identically, since QGIS uses a
 custom QNetworkAccessManager subclass).
 
-Usage (Linux/Mac):
+Usage (Mac):
 
 `python ssl-conn-qt.py`
 
-On WINDOWS: Run the `.bat` script, which to set up the environment (relative to
-a Boundless QGIS install), that then launches the `.py` script:
+.. note:: There is no current Boundless QGIS Mac installer with PKI. However,
+   there is an environment setup/launch script primarily used with development
+   builds: `ssl-conn-qt_mac.sh`.
+
+On WINDOWS: Run the `.bat` script, which will set up the environment (relative
+to a Boundless QGIS install), that then launches the `.py` script:
 
 `ssl-conn-qt.bat`
+
+.. note:: Edit batch script if Boundless QGIS install location is non-default.
 
 The test browser has the following features:
 
@@ -44,15 +50,17 @@ protocol, as well as default SSL connection handling for the `requests` module
 (as a preliminary review towards substituting `requests` over `httplib2` in the
 `gsconfig` module).
 
-Usage (Linux/Mac):
+Usage (Mac):
 
 `python ssl-conn-plugin.py geoserver_url key_file cert_file ca_file`
   NOTE: key_file should not be passphrase-protected for this test
 
-On WINDOWS: Run the `.bat` script, which to set up the environment (relative to
-a Boundless QGIS install), that then launches the `.py` script:
+On WINDOWS: Run the `.bat` script, which will set up the environment (relative
+to a Boundless QGIS install), that then launches the `.py` script:
 
 `ssl-conn-plugin.bat geoserver_url key_file cert_file ca_file`
+
+.. note:: Edit batch script if Boundless QGIS install location is non-default.
 
 Samples::
 
