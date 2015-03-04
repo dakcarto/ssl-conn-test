@@ -7,11 +7,10 @@ import ssl
 
 def usage():
     print (
-        "Usage: python ssl-conn-test.py "
-        "geoserver_catalog_url key_file cert_file ca_cert_file\n"
+        "Usage: python {0} geoserver_url key_file cert_file ca_file\n"
         "  NOTE: key_file should not be passphrase-protected for this test\n\n"
-        "Sample: python ssl-conn-test.py https://localhost:8443/geoserver "
-        "pki/rod_key.pem pki/rod_cert.pem pki/ca.pem ")
+        "Sample: python {0} https://localhost:8443/geoserver "
+        "pki/rod_key.pem pki/rod_cert.pem pki/ca.pem ".format(sys.argv[0]))
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
