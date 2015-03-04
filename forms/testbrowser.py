@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'forms/testbrowser.ui'
 #
-# Created: Tue Mar  3 18:06:07 2015
+# Created: Wed Mar  4 09:33:28 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -141,7 +141,7 @@ class Ui_TestBrowser(object):
         self.sourceButton.setText(_translate("TestBrowser", "Source", None))
         self.pageResetButton.setText(_translate("TestBrowser", "Reset", None))
         self.clearButton.setText(_translate("TestBrowser", "Clear log", None))
-        self.label.setText(_translate("TestBrowser", "SSL Protocol", None))
+        self.label.setText(_translate("TestBrowser", "SSL protocol", None))
         self.btnAuthSelect.setText(_translate("TestBrowser", "Auth select...", None))
         self.clearAuthButton.setText(_translate("TestBrowser", "X", None))
         self.btnAuthEditor.setText(_translate("TestBrowser", "Auth editor...", None))

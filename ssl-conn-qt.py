@@ -12,11 +12,12 @@ from forms.testbrowser import Ui_TestBrowser
 
 # noinspection PyPep8Naming
 class TestBrowser(QDialog, Ui_TestBrowser):
-    def __init__(self, authm, parent=None):
+    def __init__(self, authm, app=None, parent=None):
         """Constructor."""
         super(QDialog, self).__init__(parent)
         self.loaded = False
         self.authm = authm
+        self.app = app
         """:type : QgsAuthManager"""
         self.reply = None
         """:type : QNetworkReply"""
@@ -70,6 +71,8 @@ class TestBrowser(QDialog, Ui_TestBrowser):
         self.sourceButton.clicked.connect(self.showPageSource)
         self.pageResetButton.clicked.connect(self.resetPage)
 
+        self.appendLog(self.app.showSettings())
+
     def setNamConnections(self):
         self.nam.finished["QNetworkReply*"].connect(self.requestReply)
         self.nam.sslErrors["QNetworkReply*", "const QList<QSslError>&"] \
@@ -95,13 +98,6 @@ class TestBrowser(QDialog, Ui_TestBrowser):
     @pyqtSlot()
     def clearLog(self):
         self.plainTextEdit.clear()
-
-    def showEvent(self, e):
-        # noinspection PyArgumentList
-        QDialog.showEvent(self, e)
-        if not self.loaded:
-            self.loadCurrentUrl()
-            self.loaded = True
 
     @pyqtSlot()
     def clearWebView(self):
@@ -327,9 +323,7 @@ if __name__ == "__main__":
     authman = QgsAuthManager.instance()
     authman.init()
 
-    print qgsapp.showSettings()
-
-    tb = TestBrowser(authman, parent=None)
+    tb = TestBrowser(authman, app=qgsapp, parent=None)
     tb.exec_()
     tb.deleteLater()  # or WebKit thread crashes
 
