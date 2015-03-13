@@ -14,7 +14,7 @@ from forms.testbrowser import Ui_TestBrowser
 class TestBrowser(QDialog, Ui_TestBrowser):
     def __init__(self, authm, app=None, parent=None):
         """Constructor."""
-        super(QDialog, self).__init__(parent)
+        super(TestBrowser, self).__init__(parent)
         self.loaded = False
         self.authm = authm
         self.app = app
@@ -207,7 +207,7 @@ class TestBrowser(QDialog, Ui_TestBrowser):
 
     @pyqtSlot("QNetworkReply*", "const QList<QSslError>&")
     def onSslErrors(self, reply, errors):
-        msg = "SSL errors occured accessing URL {0}:"\
+        msg = "SSL errors occurred accessing URL {0}:"\
             .format(reply.request().url().toString())
         for error in errors:
             if error.error() == QSslError.NoError:
