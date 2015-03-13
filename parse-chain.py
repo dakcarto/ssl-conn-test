@@ -24,11 +24,14 @@ class ParseChain(QDialog, Ui_ParseChain):
     def __init__(self, parent=None):
         super(ParseChain, self).__init__(parent)
         self.setupUi(self)
+        self.scriptdir = os.path.abspath(os.path.dirname(__file__))
+        pkidir = os.path.join(self.scriptdir, "pki")
+        self.lastdir = pkidir
+        self.defaultcert = os.path.join(pkidir, "gd_interbundle.pem")
         self.initUi()
-        # noinspection PyArgumentList
-        self.lastdir = QDir.homePath()
 
     def initUi(self):
+        self.leChainPath.setText(self.defaultcert)
         self.log.ensureCursorVisible()
         self.btnChainSelect.clicked.connect(self.setChainPath)
         self.btnParse.clicked.connect(self.parseChain)
