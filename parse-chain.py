@@ -84,6 +84,8 @@ class ParseChain(QDialog, Ui_ParseChain):
             if not title:
                 title = cert.subjectInfo(QSslCertificate.Organization)
             txt = u"{0}\n".format(unicode(title))
+            if not cert.isValid():
+                txt += u"--> Invalid <---------------------------------------\n"
             txt += _subj("OU", cert, QSslCertificate.OrganizationalUnitName)
             txt += _subj("O", cert, QSslCertificate.Organization)
             txt += _subj("CN", cert, QSslCertificate.CommonName)
