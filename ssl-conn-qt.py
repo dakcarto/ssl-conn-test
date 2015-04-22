@@ -337,7 +337,8 @@ if __name__ == "__main__":
     # Initialize the auth system singleton
     # noinspection PyArgumentList
     authman = QgsAuthManager.instance()
-    authman.init()
+    if QGis.QGIS_VERSION_INT < 20800:
+        authman.init()  # init() part of initQgis() in 2.8+
 
     tb = TestBrowser(authman, app=qgsapp, parent=None)
     tb.exec_()
